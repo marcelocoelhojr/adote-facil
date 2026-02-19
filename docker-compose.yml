@@ -28,12 +28,13 @@ services:
     container_name: 'adote-facil-backend'
     ports:
       - "8080:8080"
+    env_file:
+      - ./backend/.env
     environment:
       - NODE_ENV=production
     depends_on:
       adote-facil-postgres:
         condition: service_healthy
-    command: sh -c "until nc -z adote-facil-postgres 5432; do echo 'Waiting for postgres...'; sleep 1; done; npm start"
     networks:
       - adote-facil-network
 
