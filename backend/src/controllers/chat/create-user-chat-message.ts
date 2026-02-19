@@ -20,10 +20,11 @@ class CreateUserChatMessageController {
         content,
       })
 
-      return response.status(201).json(result)
+      const statusCode = result.isFailure() ? 400 : 201
+
+      return response.status(statusCode).json(result.value)
     } catch (err) {
       const error = err as Error
-      console.log({ error })
       return response.status(500).json({ error: error.message })
     }
   }
