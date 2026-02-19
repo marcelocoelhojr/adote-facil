@@ -4,7 +4,6 @@ import {
   AnimalRepository,
   animalRepositoryInstance,
 } from '../../repositories/animal.js'
-import { formatAnimalImages } from './format-animal-images.js'
 
 export namespace GetUserAnimalsDTO {
   export type Params = {
@@ -28,7 +27,14 @@ export class GetUserAnimalsService {
 
     const animals = await this.animalRepository.findAllByUserId(userId)
 
-    const formattedAnimals = formatAnimalImages(animals)
+    const formattedAnimals = animals.map((animal) => {
+      return {
+        ...animal,
+        images: animal.images.map((image) => {
+          return image.imageData.toString('base64')
+        }),
+      }
+    })
 
     return Success.create({ animals: formattedAnimals })
   }
